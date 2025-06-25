@@ -29,9 +29,13 @@ async function queryAirtable(formula) {
 
   return response.data.records.map((record) => ({
     product_name: record.fields.Product_Name,
-    product_url: record.fields.Product_URL,
     image_url: record.fields.Image_URL,
     design_summary: record.fields.Design_Summary,
+    color_material: record.fields.Color_Material,
+    form: record.fields.Form,
+    object_type: record.fields.Object_Type,
+    design_language: record.fields.Design_Language,
+    emotional_character: record.fields.Emotional_Character
   }));
 }
 
