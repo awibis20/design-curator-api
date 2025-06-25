@@ -1,28 +1,20 @@
 const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
 const { getMatchingProduct } = require("./utils");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.post("/", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
-    const { tags } = req.body;
-
-    if (!tags || typeof tags !== "object") {
-      return res.status(400).json({ error: "Invalid or missing 'tags' field" });
-    }
-
+    const tags = req.query.tags ? JSON.parse(req.query.tags) : {};
     const result = await getMatchingProduct(tags);
-
     res.json(result);
-  } catch (err) {
-    console.error("Error handling request:", err);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error) {
+    console.error("Error handling request:", error);
+    res.status(500).json({ error: "Internal server error", details: error.message });
   }
 });
 
