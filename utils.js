@@ -1,3 +1,5 @@
+const { queryAirtable } = require("./airtable");
+
 function buildFormulaFromTags(tags) {
   const conditions = [];
 
@@ -12,4 +14,12 @@ function buildFormulaFromTags(tags) {
     : "";
 }
 
-module.exports = { buildFormulaFromTags };
+async function getMatchingProduct(tags) {
+  const formula = buildFormulaFromTags(tags);
+  console.log("Generated formula:", formula); // ✅ ← ADD THIS LINE
+
+  const products = await queryAirtable(formula);
+  return { products };
+}
+
+module.exports = { getMatchingProduct };
