@@ -1,18 +1,19 @@
 const axios = require("axios");
+require("dotenv").config();
+
+const baseId = process.env.AIRTABLE_BASE_ID;
+const tableId = process.env.AIRTABLE_TABLE_ID;
+const apiKey = process.env.AIRTABLE_API_KEY;
 
 async function queryAirtable(formula) {
-  const baseId = process.env.AIRTABLE_BASE_ID;
-  const tableId = process.env.AIRTABLE_TABLE_ID;
-  const apiKey = process.env.AIRTABLE_API_KEY;
+  const encodedFormula = encodeURIComponent(formula);
+  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodedFormula}`;
 
-  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodeURIComponent(formula)}`;
-
-  const response = await axios.get(url, {
+  const config = {
     headers: {
       Authorization: `Bearer ${apiKey}`
     },
     params: {
-      filterByFormula: formula,
       fields: [
         "Product_Name",
         "Product_URL",
@@ -25,18 +26,10 @@ async function queryAirtable(formula) {
         "Design_Summary"
       ]
     }
-  });
+  };
 
-  return response.data.records.map((record) => ({
-    product_name: record.fields.Product_Name,
-    image_url: record.fields.Image_URL,
-    design_summary: record.fields.Design_Summary,
-    color_material: record.fields.Color_Material,
-    form: record.fields.Form,
-    object_type: record.fields.Object_Type,
-    design_language: record.fields.Design_Language,
-    emotional_character: record.fields.Emotional_Character
-  }));
+  const response = await axios.get(url, config);
+  return response.data.records.map(record => record.fields);
 }
 
 module.exports = { queryAirtable };
