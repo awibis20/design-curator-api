@@ -16,10 +16,9 @@ function buildFormulaFromTags(tags) {
 
 async function getMatchingProduct(tags) {
   const formula = buildFormulaFromTags(tags);
-  console.log("Generated formula:", formula); // ✅ ← ADD THIS LINE
-
   const products = await queryAirtable(formula);
-  return { products };
+
+  return { products, formula };
 }
 
 module.exports = { getMatchingProduct };
