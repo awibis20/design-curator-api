@@ -5,7 +5,7 @@ async function queryAirtable(formula) {
   const tableId = process.env.AIRTABLE_TABLE_ID;
   const apiKey = process.env.AIRTABLE_API_KEY;
 
-  const url = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodeURIComponent(formula)}`;
 
   const response = await axios.get(url, {
     headers: {
