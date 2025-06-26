@@ -1,22 +1,27 @@
-const { queryAirtable } = require("./airtable");
+// === FILE 2: utils.js ===
+const { queryAirtable } = require('./airtable');
 
-function buildFormulaFromTags(tags) {
-  const clauses = [];
+function buildFormula(requests) {
+  const blocks = requests.map(req => {
+    const conditions = [];
+    conditions.push(`NOT(ISERROR(SEARCH("${req.Object_Type}", {Object_Type})))`);
 
-  for (const [field, values] of Object.entries(tags)) {
-    for (const value of values) {
-      clauses.push(`NOT(ISERROR(SEARCH("${value}", {${field}})))`);
-    }
-  }
+    Object.entries(req).forEach(([field, values]) => {
+      if (field === 'Object_Type') return;
+      values.forEach(value => {
+        conditions.push(`NOT(ISERROR(SEARCH("${value}", {${field}})))`);
+      });
+    });
 
-  return `AND(${clauses.join(",")})`;
+    return `AND(${conditions.join(', ')})`;
+  });
+
+  return `OR(${blocks.join(', ')})`;
 }
 
-async function getMatchingProduct(tags) {
-  const formula = buildFormulaFromTags(tags);
-  const products = await queryAirtable(formula);
-
-  return { products };
+async function getFilteredProducts(payload) {
+  const formula = buildFormula(payload.requests);
+  return await queryAirtable(formula);
 }
 
-module.exports = { getMatchingProduct };
+module.exports = { getFilteredProducts };
