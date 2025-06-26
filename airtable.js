@@ -17,12 +17,12 @@ async function queryAirtable(formula) {
     'Emotional_Character',
     'Design_Summary'
   ];
-
   const fieldParams = fields.map(field => `fields[]=${encodeURIComponent(field)}`).join('&');
+
   const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodedFormula}&${fieldParams}`;
 
   console.log("✅ Airtable URL:", url);
-  
+
   const response = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${apiKey}`
@@ -37,4 +37,3 @@ async function queryAirtable(formula) {
 }
 
 module.exports = { queryAirtable };
-
