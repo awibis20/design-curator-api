@@ -6,7 +6,8 @@ async function queryAirtable(formula) {
   const apiKey = process.env.AIRTABLE_API_KEY;
 
   const encodedFormula = encodeURIComponent(formula);
-
+  console.log("🧪 Encoded Formula:", encodedFormula);
+  
   const fields = [
     'Image_URL',
     'Product_Name',
