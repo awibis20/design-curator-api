@@ -1,23 +1,19 @@
-const express = require("express");
-const { getMatchingProduct } = require("./utils");
-require("dotenv").config();
+// === FILE 3: index.js ===
+const express = require('express');
+const { getFilteredProducts } = require('./utils');
 
 const app = express();
-const PORT = process.env.PORT || 10000;
-
 app.use(express.json());
 
-app.get("/", async (req, res) => {
+app.post('/filter-products', async (req, res) => {
   try {
-    const tags = req.query.tags ? JSON.parse(req.query.tags) : {};
-    const result = await getMatchingProduct(tags);
+    const result = await getFilteredProducts(req.body);
     res.json(result);
   } catch (error) {
-    console.error("Error handling request:", error);
-    res.status(500).json({ error: "Internal server error", details: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Server running...');
 });
