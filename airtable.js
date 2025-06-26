@@ -1,4 +1,3 @@
-// === FILE 1: airtable.js ===
 const axios = require('axios');
 
 async function queryAirtable(formula) {
