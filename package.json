@@ -1,15 +1,13 @@
 {
-  "name": "design-curator-api",
+  "name": "airtable-filter-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API that receives design tags, builds Airtable formulas, and returns matching products",
   "main": "index.js",
-  "type": "commonjs",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "axios": "^1.6.8",
-    "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "axios": "^1.6.7",
+    "express": "^4.19.2"
   }
 }
