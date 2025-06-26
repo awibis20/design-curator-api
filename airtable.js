@@ -5,28 +5,22 @@ async function queryAirtable(formula) {
   const tableId = process.env.AIRTABLE_TABLE_ID;
   const apiKey = process.env.AIRTABLE_API_KEY;
 
-  const encodedFormula = encodeURIComponent(formula)
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29');
+  const encodedFormula = encodeURIComponent(formula);
 
   const fields = [
-    'Image_URL',
-    'Product_Name',
     'Object_Type',
+    'Product_Name',
     'Color_Material',
     'Form',
     'Design_Language',
     'Emotional_Character',
+    'Image_URL',
+    'Product_URL',
     'Design_Summary'
   ];
-  const fieldParams = fields.map(field => `fields[]=${encodeURIComponent(field)}`).join('&');
+  const fieldParams = fields.map(field => `fields%5B%5D=${field}`).join('&');
 
-  const url =
-    'https://api.airtable.com/v0/' +
-    baseId + '/' +
-    tableId +
-    '?filterByFormula=' + encodedFormula +
-    '&' + fieldParams;
+  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?${fieldParams}&filterByFormula=${encodedFormula}`;
 
   console.log("🧪 Encoded Formula:", encodedFormula);
   console.log("✅ Airtable URL:", url);
