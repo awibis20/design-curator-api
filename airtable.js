@@ -6,8 +6,7 @@ async function queryAirtable(formula) {
   const apiKey = process.env.AIRTABLE_API_KEY;
 
   const encodedFormula = encodeURIComponent(formula);
-  console.log("🧪 Encoded Formula:", encodedFormula);
-  
+
   const fields = [
     'Image_URL',
     'Product_Name',
@@ -20,8 +19,14 @@ async function queryAirtable(formula) {
   ];
   const fieldParams = fields.map(field => `fields[]=${encodeURIComponent(field)}`).join('&');
 
-  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodedFormula}&${fieldParams}`;
+  const url =
+    'https://api.airtable.com/v0/' +
+    baseId + '/' +
+    tableId +
+    '?filterByFormula=' + encodedFormula +
+    '&' + fieldParams;
 
+  console.log("🧪 Encoded Formula:", encodedFormula);
   console.log("✅ Airtable URL:", url);
 
   const response = await axios.get(url, {
