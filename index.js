@@ -1,4 +1,3 @@
-// === FILE 3: index.js ===
 const express = require('express');
 const { getFilteredProducts } = require('./utils');
 
