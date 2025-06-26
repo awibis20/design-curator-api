@@ -1,4 +1,3 @@
-// === FILE 2: utils.js ===
 const { queryAirtable } = require('./airtable');
 
 function buildFormula(requests) {
