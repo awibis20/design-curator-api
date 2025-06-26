@@ -1,18 +1,27 @@
+
 const express = require('express');
-const { getFilteredProducts } = require('./utils');
+const bodyParser = require('body-parser');
+const { buildFormula } = require('./utils');
+const { queryAirtable } = require('./airtable');
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.post('/filter-products', async (req, res) => {
+app.post('/api/products', async (req, res) => {
   try {
-    const result = await getFilteredProducts(req.body);
+    const tagGroups = req.body.tagGroups;
+    if (!Array.isArray(tagGroups) || tagGroups.length === 0) {
+      return res.status(400).json({ error: 'tagGroups must be a non-empty array of field-value maps' });
+    }
+
+    const formula = buildFormula(tagGroups);
+    const result = await queryAirtable(formula);
     res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error('❌ API Error:', err);
+    res.status(500).json({ error: 'Server error', details: err.message });
   }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Server running...');
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
