@@ -18,9 +18,11 @@ async function queryAirtable(formula) {
     'Design_Summary'
   ];
 
-  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodedFormula}` +
-    fields.map(field => `&fields[]=${encodeURIComponent(field)}`).join('');
+  const fieldParams = fields.map(field => `fields[]=${encodeURIComponent(field)}`).join('&');
+  const url = `https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula=${encodedFormula}&${fieldParams}`;
 
+  console.log("✅ Airtable URL:", url);
+  
   const response = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${apiKey}`
